@@ -3,12 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "public/index.js",
-  "engines": {
-    "node": "16.x"
-  },
   "scripts": {
     "dev": "concurrently \"tsc -w\" \"nodemon public/index.js\"",
-    "start": "tsc && node public/index.js",
+    "start": "node public/index.js",
     "build": "tsc -p .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

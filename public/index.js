@@ -49,6 +49,12 @@ const openServer = () => {
     app.use((0, cors_1.default)());
     app.use(body_parser_1.default.urlencoded({ extended: false }));
     app.use(body_parser_1.default.json());
+    app.get('/', (req, res) => {
+        res.json({
+            estado: true,
+            mensaje: 'funciona!'
+        });
+    });
     app.use('/api/user', auth_1.routerAuth);
     app.use((req, res) => {
         res.status(400).end();
@@ -80,4 +86,4 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     responseDdConnection && (yield openServer());
 });
 startServer();
-//# sourceMappingURL=app.js.map
+//# sourceMappingURL=index.js.map
