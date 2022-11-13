@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/main.js",
   "engines": {
-    "node": "18.x"
+    "node": "16.x"
   },
   "scripts": {
     "dev": "concurrently \"tsc -w\" \"nodemon dist/app.js\"",
