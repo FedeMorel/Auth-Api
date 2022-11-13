@@ -6,11 +6,18 @@ import bcrypt from 'bcrypt'
 const schemaRegister = Joi.object({
   name: Joi.string().min(6).max(255).required(),
   email: Joi.string().min(6).max(255).required().email(),
-  password: Joi.string().min(6).max(1024).required()
+  password: Joi.string().min(6).max(1024).required(),
+  address: Joi.object().keys({
+    street: Joi.string().max(50).required(),
+    location: Joi.string().max(50).required(),
+    city: Joi.string().max(50).required(),
+    country: Joi.string().max(50).required(),
+    cp: Joi.string().min(4).max(4).required()
+  })
 })
 
 export const registerUser = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, address } = req.body;
   const { error } = schemaRegister.validate(req.body);
 
   const encryptedPassword = await encryptPassword(password);
@@ -18,7 +25,8 @@ export const registerUser = async (req: Request, res: Response) => {
   const user = new User({
     name: name,
     email: email,
-    password: encryptedPassword
+    password: encryptedPassword,
+    address: address
   });
 
   if (!!error) {

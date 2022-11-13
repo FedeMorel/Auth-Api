@@ -20,6 +20,34 @@ const userSchema = new mongoose_1.Schema({
         required: true,
         minlength: 6
     },
+    address: {
+        street: {
+            type: String,
+            required: true,
+            maxlength: 50
+        },
+        location: {
+            type: String,
+            required: true,
+            maxlength: 50
+        },
+        city: {
+            type: String,
+            required: true,
+            maxlength: 50
+        },
+        country: {
+            type: String,
+            required: true,
+            maxlength: 50
+        },
+        cp: {
+            type: String,
+            required: true,
+            maxlength: 4,
+            minLenght: 4
+        }
+    },
     date: {
         type: Date,
         default: Date.now

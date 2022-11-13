@@ -19,16 +19,24 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const schemaRegister = joi_1.default.object({
     name: joi_1.default.string().min(6).max(255).required(),
     email: joi_1.default.string().min(6).max(255).required().email(),
-    password: joi_1.default.string().min(6).max(1024).required()
+    password: joi_1.default.string().min(6).max(1024).required(),
+    address: joi_1.default.object().keys({
+        street: joi_1.default.string().max(50).required(),
+        location: joi_1.default.string().max(50).required(),
+        city: joi_1.default.string().max(50).required(),
+        country: joi_1.default.string().max(50).required(),
+        cp: joi_1.default.string().min(4).max(4).required()
+    })
 });
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, email, password } = req.body;
+    const { name, email, password, address } = req.body;
     const { error } = schemaRegister.validate(req.body);
     const encryptedPassword = yield encryptPassword(password);
     const user = new user_1.User({
         name: name,
         email: email,
-        password: encryptedPassword
+        password: encryptedPassword,
+        address: address
     });
     if (!!error) {
         return res.status(400).json({ error: error.details[0].message });

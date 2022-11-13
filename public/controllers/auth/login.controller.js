@@ -56,7 +56,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(204).json({ error: 'User not found' });
     }
     if (!(yield isValidPassword(password, user.password))) {
-        return res.status(400).json({ error: 'contraseña no válida' });
+        return res.status(400).json({ error: 'Invalid password' });
     }
     const token = generateToken(user.name, user.id);
     res.header('auth-token', token).json({

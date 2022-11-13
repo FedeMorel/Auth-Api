@@ -21,7 +21,7 @@ export const login = async (req: Request, res: Response) => {
   if (!user) { return res.status(204).json({ error: 'User not found' }); }
 
   if (!await isValidPassword(password, user.password)) {
-    return res.status(400).json({ error: 'contraseña no válida' })
+    return res.status(400).json({ error: 'Invalid password' })
   }
 
   const token = generateToken(user.name, user.id);
