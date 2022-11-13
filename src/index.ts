@@ -1,14 +1,13 @@
+import cors from 'cors';
 import * as dotenv from 'dotenv';
+import bodyparser from 'body-parser'
+import { dbConnection } from './mongo';
+import { routerAuth } from './router/auth';
+import express, { Application } from 'express';
 dotenv.config();
 
-import cors from 'cors';
-import express, { Application } from 'express';
-import mongoose from 'mongoose';
-import bodyparser from 'body-parser'
-import { routerAuth } from './router/auth';
 
 const app: Application = express();
-const connectionString = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.82gad.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`
 
 const openServer = (): boolean => {
 
@@ -20,11 +19,9 @@ const openServer = (): boolean => {
 
   app.get('/', (req, res) => {
     res.json({
-      estado: true,
-      mensaje: 'funciona!'
+      message: 'Auth-Api working'
     })
   });
-
 
   app.use('/api/user', routerAuth);
 
@@ -36,17 +33,6 @@ const openServer = (): boolean => {
     app.listen(PORT, () => {
       console.log(`Escuchando en el puerto ${PORT}`);
     });
-    return true;
-  } catch (err) {
-    console.error(err);
-    return false;
-  }
-};
-
-const dbConnection = async () => {
-  try {
-    await mongoose.connect(connectionString);
-    console.log('Base de datos conectada');
     return true;
   } catch (err) {
     console.error(err);

@@ -1,7 +1,10 @@
-import Joi from 'joi';
+import Joi, { string } from 'joi';
 import bcrypt from 'bcrypt'
+import jwt from "jsonwebtoken";
+import * as dotenv from 'dotenv';
 import { User } from '../../schemas/user';
 import { Request, Response } from 'express';
+dotenv.config();
 
 const schemaLogin = Joi.object({
   email: Joi.string().min(6).max(255).required().email(),
@@ -21,12 +24,22 @@ export const login = async (req: Request, res: Response) => {
     return res.status(400).json({ error: 'contraseña no válida' })
   }
 
-  res.json({
-    message: 'authenticated user'
-  })
+  const token = generateToken(user.name, user.id);
+
+  res.header('auth-token', token).json({
+    message: 'authenticated user',
+    token: token
+  });
 }
 
 const isValidPassword = async (pass: string, encryptedPass: string): Promise<boolean> => {
   const result = await bcrypt.compare(pass, encryptedPass);
   return !!result
+}
+
+const generateToken = (nameUser: string, id: string) => {
+  return jwt.sign({
+    name: nameUser,
+    id: id
+  }, process.env.TOKEN_SECRET as string)
 }
