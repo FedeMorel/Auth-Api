@@ -39,10 +39,11 @@ const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
-const mongo_1 = require("./mongo");
+const mongoose_1 = __importDefault(require("mongoose"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const auth_1 = require("./router/auth");
 const app = (0, express_1.default)();
+const connectionString = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.82gad.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
 const openServer = () => {
     const PORT = process.env.PORT || 3003;
     app.use((0, cors_1.default)());
@@ -63,8 +64,19 @@ const openServer = () => {
         return false;
     }
 };
+const dbConnection = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield mongoose_1.default.connect(connectionString);
+        console.log('Base de datos conectada');
+        return true;
+    }
+    catch (err) {
+        console.error(err);
+        return false;
+    }
+});
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
-    let responseDdConnection = yield (0, mongo_1.dbConnection)();
+    let responseDdConnection = yield dbConnection();
     responseDdConnection && (yield openServer());
 });
 startServer();
