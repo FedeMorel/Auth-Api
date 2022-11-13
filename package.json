@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/main.js",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "dev": "concurrently \"tsc -w\" \"nodemon dist/app.js\"",
     "start": "tsc && node dist/app.js",
