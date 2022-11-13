@@ -1,14 +1,14 @@
 {
-  "name": "api-sensors",
+  "name": "Auth-Api",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/main.js",
+  "main": "dist/index.js",
   "engines": {
     "node": "16.x"
   },
   "scripts": {
-    "dev": "concurrently \"tsc -w\" \"nodemon dist/app.js\"",
-    "start": "tsc && node dist/app.js",
+    "dev": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
+    "start": "tsc && node dist/index.js",
     "build": "tsc -p .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
