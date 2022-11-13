@@ -18,6 +18,13 @@ const openServer = (): boolean => {
   app.use(bodyparser.urlencoded({ extended: false }));
   app.use(bodyparser.json());
 
+  app.get('/', (req, res) => {
+    res.json({
+      estado: true,
+      mensaje: 'funciona!'
+    })
+  });
+
 
   app.use('/api/user', routerAuth);
 
