@@ -9,6 +9,7 @@ import { routerAuth } from './router/auth';
 
 const app: Application = express();
 const connectionString = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.82gad.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`
+
 const openServer = (): boolean => {
 
   const PORT = process.env.PORT || 3003;
