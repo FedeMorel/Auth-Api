@@ -18,7 +18,7 @@ export const login = async (req: Request, res: Response) => {
 
   const user = await User.findOne({ email });
 
-  if (!user) { return res.status(204).json({ error: 'User not found' }); }
+  if (!user) { return res.status(200).json({ error: 'User not found' }); }
 
   if (!await isValidPassword(password, user.password)) {
     return res.status(400).json({ error: 'Invalid password' })
@@ -28,6 +28,12 @@ export const login = async (req: Request, res: Response) => {
 
   res.header('auth-token', token).json({
     message: 'authenticated user',
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      address: user.address
+    },
     token: token
   });
 }

@@ -1,7 +1,7 @@
 import Joi from 'joi';
+import bcrypt from 'bcrypt'
 import { User } from '../../schemas/user';
 import { Request, Response } from 'express';
-import bcrypt from 'bcrypt'
 
 const schemaRegister = Joi.object({
   name: Joi.string().min(6).max(255).required(),
@@ -36,18 +36,25 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 
   if (await isEmailExist(email)) {
-    return res.status(400).json(
+    return res.status(406).json(
       { error: 'Email already registered' }
     )
   }
 
   try {
-    await user.save();
+    const newUser = await user.save();
+    const { name, email, address, id } = newUser
     res.status(201).json({
-      message: 'User created successfully'
+      message: 'User created successfully',
+      user: {
+        id,
+        name,
+        email,
+        address
+      }
     })
   } catch (error) {
-    res.status(400).json({ error })
+    res.status(500).json({ error })
   }
 };
 
