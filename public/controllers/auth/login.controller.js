@@ -63,9 +63,12 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         message: 'authenticated user',
         user: {
             id: user.id,
+            role: user.role,
             name: user.name,
             email: user.email,
-            address: user.address
+            address: user.address,
+            birthday: user.birthday,
+            phone: user.phone,
         },
         token: token
     });
