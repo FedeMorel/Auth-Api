@@ -6,47 +6,64 @@ const userSchema = new mongoose_1.Schema({
     name: {
         type: String,
         required: true,
-        min: 6,
-        max: 255
+        minLength: 5,
+        maxLength: 15
     },
     email: {
         type: String,
         required: true,
-        min: 6,
-        max: 1024
+        minLength: 10,
+        maxLength: 50
     },
     password: {
         type: String,
         required: true,
-        minlength: 6
+        minlength: 8,
+        maxLength: 300
     },
     address: {
         street: {
             type: String,
-            required: true,
-            maxlength: 50
+            maxlength: 50,
+            default: ""
         },
         location: {
             type: String,
-            required: true,
-            maxlength: 50
+            maxlength: 50,
+            default: ""
         },
         city: {
             type: String,
-            required: true,
-            maxlength: 50
+            maxlength: 50,
+            default: ""
         },
         country: {
             type: String,
-            required: true,
-            maxlength: 50
+            maxlength: 50,
+            default: ""
         },
         cp: {
             type: String,
-            required: true,
             maxlength: 4,
-            minLenght: 4
-        }
+            default: ""
+        },
+    },
+    birthday: {
+        type: Date,
+        default: null
+    },
+    phone: {
+        type: String,
+        maxlength: 15,
+        default: ""
+    },
+    state: {
+        type: Boolean,
+        default: true
+    },
+    role: {
+        type: String,
+        default: "user"
     },
     date: {
         type: Date,

@@ -4,20 +4,22 @@ import { User } from '../../schemas/user';
 import { Request, Response } from 'express';
 
 const schemaRegister = Joi.object({
-  name: Joi.string().min(6).max(255).required(),
-  email: Joi.string().min(6).max(255).required().email(),
-  password: Joi.string().min(6).max(1024).required(),
+  name: Joi.string().min(5).max(15).required(),
+  email: Joi.string().min(10).max(50).required().email(),
+  password: Joi.string().min(8).max(30).required(),
   address: Joi.object().keys({
-    street: Joi.string().max(50).required(),
-    location: Joi.string().max(50).required(),
-    city: Joi.string().max(50).required(),
-    country: Joi.string().max(50).required(),
-    cp: Joi.string().min(4).max(4).required()
-  })
+    street: Joi.string().max(50),
+    location: Joi.string().max(50),
+    city: Joi.string().max(50),
+    country: Joi.string().max(50),
+    cp: Joi.string().alphanum().min(4).max(4),
+  }),
+  birthday: Joi.date(),
+  phone: Joi.string().alphanum().max(15),
 })
 
 export const registerUser = async (req: Request, res: Response) => {
-  const { name, email, password, address } = req.body;
+  const { name, email, password, address, birthday, phone } = req.body;
   const { error } = schemaRegister.validate(req.body);
 
   const encryptedPassword = await encryptPassword(password);
@@ -26,7 +28,9 @@ export const registerUser = async (req: Request, res: Response) => {
     name: name,
     email: email,
     password: encryptedPassword,
-    address: address
+    address: address,
+    birthday: birthday,
+    phone: phone
   });
 
   if (!!error) {
@@ -43,14 +47,18 @@ export const registerUser = async (req: Request, res: Response) => {
 
   try {
     const newUser = await user.save();
-    const { name, email, address, id } = newUser
+    const { id, name, email, address, birthday, phone, role, date } = newUser
     res.status(201).json({
       message: 'User created successfully',
       user: {
         id,
+        role,
         name,
         email,
-        address
+        address,
+        birthday,
+        phone,
+        date
       }
     })
   } catch (error) {

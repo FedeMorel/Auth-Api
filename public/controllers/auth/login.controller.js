@@ -53,7 +53,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(400).json({ error: error.details[0].message });
     const user = yield user_1.User.findOne({ email });
     if (!user) {
-        return res.status(204).json({ error: 'User not found' });
+        return res.status(200).json({ error: 'User not found' });
     }
     if (!(yield isValidPassword(password, user.password))) {
         return res.status(400).json({ error: 'Invalid password' });
@@ -61,6 +61,12 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = generateToken(user.name, user.id);
     res.header('auth-token', token).json({
         message: 'authenticated user',
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            address: user.address
+        },
         token: token
     });
 });

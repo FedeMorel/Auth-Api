@@ -5,4 +5,6 @@ export const routerAuth = Router();
 
 routerAuth.post('/register', registerUser);
 routerAuth.post('/login', login);
+routerAuth.post('/modify-date', login);
+
 

@@ -7,4 +7,5 @@ const register_controller_1 = require("../controllers/auth/register.controller")
 exports.routerAuth = (0, express_1.Router)();
 exports.routerAuth.post('/register', register_controller_1.registerUser);
 exports.routerAuth.post('/login', login_controller_1.login);
+exports.routerAuth.post('/modify-date', login_controller_1.login);
 //# sourceMappingURL=auth.js.map
