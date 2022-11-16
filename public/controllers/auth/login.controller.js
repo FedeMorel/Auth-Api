@@ -41,31 +41,33 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv = __importStar(require("dotenv"));
 const user_1 = require("../../schemas/user");
+const resultCode_enum_1 = require("../../utils/resultCode.enum");
 dotenv.config();
 const schemaLogin = joi_1.default.object({
-    email: joi_1.default.string().min(6).max(255).required().email(),
-    password: joi_1.default.string().min(6).max(1024).required()
+    mail: joi_1.default.string().min(10).max(50).required().email(),
+    password: joi_1.default.string().min(8).max(30).required()
 });
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = req.body;
+    const { mail, password } = req.body;
     const { error } = schemaLogin.validate(req.body);
     if (error)
-        return res.status(400).json({ error: error.details[0].message });
-    const user = yield user_1.User.findOne({ email });
+        return res.status(400).json({ resultCode: resultCode_enum_1.resultCode.VALIDATION_ERROR, error: error.details[0].message });
+    const user = yield user_1.User.findOne({ mail });
     if (!user) {
-        return res.status(200).json({ error: 'User not found' });
+        return res.status(200).json({ resultCode: resultCode_enum_1.resultCode.USER_NOT_FOUND, error: 'User not found' });
     }
     if (!(yield isValidPassword(password, user.password))) {
-        return res.status(400).json({ error: 'Invalid password' });
+        return res.status(400).json({ resultCode: resultCode_enum_1.resultCode.INVALID_PASSWORD, error: 'Invalid password' });
     }
     const token = generateToken(user.name, user.id);
     res.header('auth-token', token).json({
         message: 'authenticated user',
+        resultCode: resultCode_enum_1.resultCode.OK,
         user: {
             id: user.id,
             role: user.role,
             name: user.name,
-            email: user.email,
+            mail: user.mail,
             address: user.address,
             birthday: user.birthday,
             phone: user.phone,

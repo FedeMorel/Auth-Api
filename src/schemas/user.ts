@@ -7,7 +7,7 @@ const userSchema = new Schema({
     minLength: 5,
     maxLength: 15
   },
-  email: {
+  mail: {
     type: String,
     required: true,
     minLength: 10,

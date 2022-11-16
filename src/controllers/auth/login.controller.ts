@@ -4,35 +4,38 @@ import jwt from "jsonwebtoken";
 import * as dotenv from 'dotenv';
 import { User } from '../../schemas/user';
 import { Request, Response } from 'express';
+import { resultCode } from '../../utils/resultCode.enum';
 dotenv.config();
 
 const schemaLogin = Joi.object({
-  email: Joi.string().min(6).max(255).required().email(),
-  password: Joi.string().min(6).max(1024).required()
+  mail: Joi.string().min(10).max(50).required().email(),
+  password: Joi.string().min(8).max(30).required()
 })
 
 export const login = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { mail, password } = req.body;
   const { error } = schemaLogin.validate(req.body);
-  if (error) return res.status(400).json({ error: error.details[0].message })
 
-  const user = await User.findOne({ email });
+  if (error) return res.status(400).json({ resultCode: resultCode.VALIDATION_ERROR, error: error.details[0].message })
 
-  if (!user) { return res.status(200).json({ error: 'User not found' }); }
+  const user = await User.findOne({ mail });
+
+  if (!user) { return res.status(200).json({ resultCode: resultCode.USER_NOT_FOUND, error: 'User not found' }); }
 
   if (!await isValidPassword(password, user.password)) {
-    return res.status(400).json({ error: 'Invalid password' })
+    return res.status(400).json({ resultCode: resultCode.INVALID_PASSWORD, error: 'Invalid password' })
   }
 
   const token = generateToken(user.name, user.id);
 
   res.header('auth-token', token).json({
     message: 'authenticated user',
+    resultCode: resultCode.OK,
     user: {
       id: user.id,
       role: user.role,
       name: user.name,
-      email: user.email,
+      mail: user.mail,
       address: user.address,
       birthday: user.birthday,
       phone: user.phone,

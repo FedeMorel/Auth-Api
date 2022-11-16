@@ -12,13 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isEmailExist = exports.registerUser = void 0;
+exports.isMailExist = exports.registerUser = void 0;
 const joi_1 = __importDefault(require("joi"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_1 = require("../../schemas/user");
+const resultCode_enum_1 = require("../../utils/resultCode.enum");
 const schemaRegister = joi_1.default.object({
     name: joi_1.default.string().min(5).max(15).required(),
-    email: joi_1.default.string().min(10).max(50).required().email(),
+    mail: joi_1.default.string().min(10).max(50).required().email(),
     password: joi_1.default.string().min(8).max(30).required(),
     address: joi_1.default.object().keys({
         street: joi_1.default.string().max(50),
@@ -28,36 +29,37 @@ const schemaRegister = joi_1.default.object({
         cp: joi_1.default.string().alphanum().min(4).max(4),
     }),
     birthday: joi_1.default.date(),
-    phone: joi_1.default.string().alphanum().max(15),
+    phone: joi_1.default.string().max(15),
 });
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, email, password, address, birthday, phone } = req.body;
+    const { name, mail, password, address, birthday, phone } = req.body;
     const { error } = schemaRegister.validate(req.body);
     const encryptedPassword = yield encryptPassword(password);
     const user = new user_1.User({
         name: name,
-        email: email,
+        mail: mail,
         password: encryptedPassword,
         address: address,
         birthday: birthday,
         phone: phone
     });
     if (!!error) {
-        return res.status(400).json({ error: error.details[0].message });
+        return res.status(400).json({ resultCode: resultCode_enum_1.resultCode.VALIDATION_ERROR, error: error.details[0].message });
     }
-    if (yield (0, exports.isEmailExist)(email)) {
-        return res.status(406).json({ error: 'Email already registered' });
+    if (yield (0, exports.isMailExist)(mail)) {
+        return res.status(406).json({ resultCode: resultCode_enum_1.resultCode.MAIL_REGISTRED, error: 'Mail already registered' });
     }
     try {
         const newUser = yield user.save();
-        const { id, name, email, address, birthday, phone, role, date } = newUser;
+        const { id, name, mail, address, birthday, phone, role, date } = newUser;
         res.status(201).json({
             message: 'User created successfully',
+            resultCode: resultCode_enum_1.resultCode.OK,
             user: {
                 id,
                 role,
                 name,
-                email,
+                mail,
                 address,
                 birthday,
                 phone,
@@ -66,15 +68,15 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
     catch (error) {
-        res.status(500).json({ error });
+        res.status(500).json({ resultCode: resultCode_enum_1.resultCode.FAIL, error });
     }
 });
 exports.registerUser = registerUser;
-const isEmailExist = (email) => __awaiter(void 0, void 0, void 0, function* () {
-    let response = yield user_1.User.findOne({ email });
+const isMailExist = (mail) => __awaiter(void 0, void 0, void 0, function* () {
+    let response = yield user_1.User.findOne({ mail });
     return !!response;
 });
-exports.isEmailExist = isEmailExist;
+exports.isMailExist = isMailExist;
 const encryptPassword = (pass) => __awaiter(void 0, void 0, void 0, function* () {
     const salt = yield bcrypt_1.default.genSalt(10);
     return yield bcrypt_1.default.hash(pass, salt);
