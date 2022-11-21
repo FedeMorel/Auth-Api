@@ -39,7 +39,7 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv = __importStar(require("dotenv"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const mongo_1 = require("./mongo");
-const auth_1 = require("./router/auth");
+const user_1 = require("./router/user");
 const express_1 = __importDefault(require("express"));
 dotenv.config();
 const app = (0, express_1.default)();
@@ -53,7 +53,7 @@ const openServer = () => {
             message: 'Auth-Api working'
         });
     });
-    app.use('/api/user', auth_1.routerAuth);
+    app.use('/api/user', user_1.routerUser);
     app.use((req, res) => {
         res.status(400).end();
     });

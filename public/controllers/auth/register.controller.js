@@ -44,31 +44,35 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         phone: phone
     });
     if (!!error) {
-        return res.status(400).json({ resultCode: resultCode_enum_1.resultCode.VALIDATION_ERROR, error: error.details[0].message });
+        return res.status(400).json({ header: { resultCode: resultCode_enum_1.resultCode.VALIDATION_ERROR, error: error.details[0].message } });
     }
     if (yield (0, exports.isMailExist)(mail)) {
-        return res.status(406).json({ resultCode: resultCode_enum_1.resultCode.MAIL_REGISTRED, error: 'Mail already registered' });
+        return res.status(406).json({ header: { resultCode: resultCode_enum_1.resultCode.MAIL_REGISTRED, error: 'Mail already registered' } });
     }
     try {
         const newUser = yield user.save();
         const { id, name, mail, address, birthday, phone, role, date } = newUser;
         res.status(201).json({
-            message: 'User created successfully',
-            resultCode: resultCode_enum_1.resultCode.OK,
-            user: {
-                id,
-                role,
-                name,
-                mail,
-                address,
-                birthday,
-                phone,
-                date
+            header: {
+                message: 'User created successfully',
+                resultCode: resultCode_enum_1.resultCode.OK,
+            },
+            data: {
+                user: {
+                    id,
+                    role,
+                    name,
+                    mail,
+                    address,
+                    birthday,
+                    phone,
+                    date
+                }
             }
         });
     }
     catch (error) {
-        res.status(500).json({ resultCode: resultCode_enum_1.resultCode.FAIL, error });
+        res.status(500).json({ header: { resultCode: resultCode_enum_1.resultCode.FAIL, error } });
     }
 });
 exports.registerUser = registerUser;

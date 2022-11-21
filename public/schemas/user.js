@@ -1,7 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const mongoose_1 = require("mongoose");
+const mongoose_paginate_v2_1 = __importDefault(require("mongoose-paginate-v2"));
 const userSchema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -70,6 +74,7 @@ const userSchema = new mongoose_1.Schema({
         default: Date.now
     }
 });
+userSchema.plugin(mongoose_paginate_v2_1.default);
 exports.User = (0, mongoose_1.model)('user', userSchema);
 userSchema.set('toJSON', {
     transform: (document, returnesObject) => {

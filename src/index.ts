@@ -2,7 +2,7 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 import bodyparser from 'body-parser'
 import { dbConnection } from './mongo';
-import { routerAuth } from './router/auth';
+import { routerUser } from './router/user';
 import express, { Application } from 'express';
 dotenv.config();
 
@@ -23,7 +23,7 @@ const openServer = (): boolean => {
     })
   });
 
-  app.use('/api/user', routerAuth);
+  app.use('/api/user', routerUser);
 
   app.use((req, res) => {
     res.status(400).end();
@@ -45,6 +45,5 @@ const startServer = async () => {
   responseDdConnection && (await openServer());
 
 };
-
 
 startServer();

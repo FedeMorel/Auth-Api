@@ -36,13 +36,13 @@ export const registerUser = async (req: Request, res: Response) => {
 
   if (!!error) {
     return res.status(400).json(
-      { resultCode: resultCode.VALIDATION_ERROR, error: error.details[0].message }
+      { header: { resultCode: resultCode.VALIDATION_ERROR, error: error.details[0].message } }
     )
   }
 
   if (await isMailExist(mail)) {
     return res.status(406).json(
-      { resultCode: resultCode.MAIL_REGISTRED, error: 'Mail already registered' }
+      { header: { resultCode: resultCode.MAIL_REGISTRED, error: 'Mail already registered' } }
     )
   }
 
@@ -50,21 +50,25 @@ export const registerUser = async (req: Request, res: Response) => {
     const newUser = await user.save();
     const { id, name, mail, address, birthday, phone, role, date } = newUser
     res.status(201).json({
-      message: 'User created successfully',
-      resultCode: resultCode.OK,
-      user: {
-        id,
-        role,
-        name,
-        mail,
-        address,
-        birthday,
-        phone,
-        date
+      header: {
+        message: 'User created successfully',
+        resultCode: resultCode.OK,
+      },
+      data: {
+        user: {
+          id,
+          role,
+          name,
+          mail,
+          address,
+          birthday,
+          phone,
+          date
+        }
       }
     })
   } catch (error) {
-    res.status(500).json({ resultCode: resultCode.FAIL, error })
+    res.status(500).json({ header: { resultCode: resultCode.FAIL, error } })
   }
 };
 

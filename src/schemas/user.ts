@@ -1,6 +1,8 @@
-import { model, Schema } from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2"
+import { IUser } from "../utils/IUser";
 
-const userSchema = new Schema({
+const userSchema: Schema = new Schema({
   name: {
     type: String,
     required: true,
@@ -69,8 +71,11 @@ const userSchema = new Schema({
   }
 })
 
+userSchema.plugin(mongoosePaginate);
 
-export const User = model('user', userSchema);
+interface UserDocument extends mongoose.Document, IUser { }
+
+export const User = model<UserDocument, mongoose.PaginateModel<UserDocument>>('user', userSchema);
 
 userSchema.set('toJSON', {
   transform: (document: any, returnesObject: any) => {

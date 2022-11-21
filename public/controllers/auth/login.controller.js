@@ -51,28 +51,32 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { mail, password } = req.body;
     const { error } = schemaLogin.validate(req.body);
     if (error)
-        return res.status(400).json({ resultCode: resultCode_enum_1.resultCode.VALIDATION_ERROR, error: error.details[0].message });
+        return res.status(400).json({ header: { resultCode: resultCode_enum_1.resultCode.VALIDATION_ERROR, error: error.details[0].message } });
     const user = yield user_1.User.findOne({ mail });
     if (!user) {
-        return res.status(200).json({ resultCode: resultCode_enum_1.resultCode.USER_NOT_FOUND, error: 'User not found' });
+        return res.status(200).json({ header: { resultCode: resultCode_enum_1.resultCode.USER_NOT_FOUND, error: 'User not found' } });
     }
     if (!(yield isValidPassword(password, user.password))) {
-        return res.status(400).json({ resultCode: resultCode_enum_1.resultCode.INVALID_PASSWORD, error: 'Invalid password' });
+        return res.status(400).json({ header: { resultCode: resultCode_enum_1.resultCode.INVALID_PASSWORD, error: 'Invalid password' } });
     }
-    const token = generateToken(user.name, user.id);
+    const token = generateToken(user.name, user.id, user.role);
     res.header('auth-token', token).json({
-        message: 'authenticated user',
-        resultCode: resultCode_enum_1.resultCode.OK,
-        user: {
-            id: user.id,
-            role: user.role,
-            name: user.name,
-            mail: user.mail,
-            address: user.address,
-            birthday: user.birthday,
-            phone: user.phone,
+        header: {
+            message: 'authenticated user',
+            resultCode: resultCode_enum_1.resultCode.OK,
         },
-        token: token
+        data: {
+            user: {
+                id: user.id,
+                role: user.role,
+                name: user.name,
+                mail: user.mail,
+                address: user.address,
+                birthday: user.birthday,
+                phone: user.phone,
+            },
+            token: token
+        }
     });
 });
 exports.login = login;
@@ -80,10 +84,11 @@ const isValidPassword = (pass, encryptedPass) => __awaiter(void 0, void 0, void 
     const result = yield bcrypt_1.default.compare(pass, encryptedPass);
     return !!result;
 });
-const generateToken = (nameUser, id) => {
+const generateToken = (nameUser, id, user) => {
     return jsonwebtoken_1.default.sign({
         name: nameUser,
-        id: id
+        id: id,
+        role: user
     }, process.env.TOKEN_SECRET);
 };
 //# sourceMappingURL=login.controller.js.map
