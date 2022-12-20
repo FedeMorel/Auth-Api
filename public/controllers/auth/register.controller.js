@@ -34,6 +34,12 @@ const schemaRegister = joi_1.default.object({
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, mail, password, address, birthday, phone } = req.body;
     const { error } = schemaRegister.validate(req.body);
+    if (!!error) {
+        return res.status(400).json({ header: { resultCode: resultCode_enum_1.resultCode.VALIDATION_ERROR, error: error.details[0].message } });
+    }
+    if (yield (0, exports.isMailExist)(mail)) {
+        return res.status(406).json({ header: { resultCode: resultCode_enum_1.resultCode.MAIL_REGISTRED, error: 'Mail already registered' } });
+    }
     const encryptedPassword = yield encryptPassword(password);
     const user = new user_1.User({
         name: name,
@@ -43,12 +49,6 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         birthday: birthday,
         phone: phone
     });
-    if (!!error) {
-        return res.status(400).json({ header: { resultCode: resultCode_enum_1.resultCode.VALIDATION_ERROR, error: error.details[0].message } });
-    }
-    if (yield (0, exports.isMailExist)(mail)) {
-        return res.status(406).json({ header: { resultCode: resultCode_enum_1.resultCode.MAIL_REGISTRED, error: 'Mail already registered' } });
-    }
     try {
         const newUser = yield user.save();
         const { id, name, mail, address, birthday, phone, role, date } = newUser;

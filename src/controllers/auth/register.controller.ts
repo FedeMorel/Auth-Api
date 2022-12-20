@@ -23,17 +23,6 @@ export const registerUser = async (req: Request, res: Response) => {
   const { name, mail, password, address, birthday, phone } = req.body;
   const { error } = schemaRegister.validate(req.body);
 
-  const encryptedPassword = await encryptPassword(password);
-
-  const user = new User({
-    name: name,
-    mail: mail,
-    password: encryptedPassword,
-    address: address,
-    birthday: birthday,
-    phone: phone
-  });
-
   if (!!error) {
     return res.status(400).json(
       { header: { resultCode: resultCode.VALIDATION_ERROR, error: error.details[0].message } }
@@ -45,6 +34,17 @@ export const registerUser = async (req: Request, res: Response) => {
       { header: { resultCode: resultCode.MAIL_REGISTRED, error: 'Mail already registered' } }
     )
   }
+
+  const encryptedPassword = await encryptPassword(password);
+
+  const user = new User({
+    name: name,
+    mail: mail,
+    password: encryptedPassword,
+    address: address,
+    birthday: birthday,
+    phone: phone
+  });
 
   try {
     const newUser = await user.save();
