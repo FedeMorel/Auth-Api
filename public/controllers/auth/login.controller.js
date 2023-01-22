@@ -52,32 +52,41 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { error } = schemaLogin.validate(req.body);
     if (error)
         return res.status(400).json({ header: { resultCode: resultCode_enum_1.resultCode.VALIDATION_ERROR, error: error.details[0].message } });
-    const user = yield user_1.User.findOne({ mail });
-    if (!user) {
-        return res.status(200).json({ header: { resultCode: resultCode_enum_1.resultCode.USER_NOT_FOUND, error: 'User not found' } });
-    }
-    if (!(yield isValidPassword(password, user.password))) {
-        return res.status(400).json({ header: { resultCode: resultCode_enum_1.resultCode.INVALID_PASSWORD, error: 'Invalid password' } });
-    }
-    const token = generateToken(user.name, user.id, user.role);
-    res.header('auth-token', token).json({
-        header: {
-            message: 'authenticated user',
-            resultCode: resultCode_enum_1.resultCode.OK,
-        },
-        data: {
-            user: {
-                id: user.id,
-                role: user.role,
-                name: user.name,
-                mail: user.mail,
-                address: user.address,
-                birthday: user.birthday,
-                phone: user.phone,
-            },
-            token: token
+    try {
+        const user = yield user_1.User.findOne({ mail });
+        if (!user) {
+            return res.status(200).json({ header: { resultCode: resultCode_enum_1.resultCode.USER_NOT_FOUND, error: 'User not found' } });
         }
-    });
+        if (!user.state) {
+            return res.status(200).json({ header: { resultCode: resultCode_enum_1.resultCode.DISABLED_USER, error: 'User deasctivated' } });
+        }
+        if (!(yield isValidPassword(password, user.password))) {
+            return res.status(400).json({ header: { resultCode: resultCode_enum_1.resultCode.INVALID_PASSWORD, error: 'Invalid password' } });
+        }
+        const token = generateToken(user.name, user.id, user.role);
+        res.header('auth-token', token).json({
+            header: {
+                message: 'authenticated user',
+                resultCode: resultCode_enum_1.resultCode.OK,
+            },
+            data: {
+                user: {
+                    id: user.id,
+                    role: user.role,
+                    name: user.name,
+                    mail: user.mail,
+                    address: user.address,
+                    birthday: user.birthday,
+                    phone: user.phone,
+                },
+                token: token
+            }
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ header: { resultCode: resultCode_enum_1.resultCode.FAIL, error } });
+    }
 });
 exports.login = login;
 const isValidPassword = (pass, encryptedPass) => __awaiter(void 0, void 0, void 0, function* () {

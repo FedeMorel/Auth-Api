@@ -5,6 +5,7 @@ export enum resultCode {
   USER_NOT_FOUND = 3,
   INVALID_PASSWORD = 4,
   UNAUTHORIZED = 5,
+  NOT_MODIFIED = 6,
+  DISABLED_USER = 7,
   FAIL = 9,
-
 }

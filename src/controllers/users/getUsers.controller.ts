@@ -4,13 +4,18 @@ import { resultCode } from "../../utils/resultCode.enum";
 
 export const getUsers = async (req: Request, res: Response) => {
 
-  const options = {
-    page: 1,
-    limit: 10
-  }
-
   try {
+    const reqPage = Number(req.query.page) || 1;
+    const reqLimit = Number(req.query.limit) || 20;
+
+    const options = {
+      page: reqPage,
+      limit: reqLimit
+    }
+
     const { docs, totalDocs, limit, totalPages, page, pagingCounter, nextPage } = await User.paginate({}, options);
+    const users = docs.map(user => obfuscateData(user));
+
     res.status(200).json({
       header: {
         resultCode: resultCode.OK,
@@ -24,10 +29,19 @@ export const getUsers = async (req: Request, res: Response) => {
           pagingCounter,
           nextPage
         },
-        users: docs
+        users: users
       }
     })
-  } catch (err) {
-
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ header: { resultCode: resultCode.FAIL, error } });
   }
+
 }
+
+
+const obfuscateData = ({ address, name, mail, birthday, phone, state, role, date, id }: any) => {
+  return { address, name, mail, birthday, phone, state, role, date, id }
+}
+
+

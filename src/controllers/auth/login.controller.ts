@@ -18,34 +18,44 @@ export const login = async (req: Request, res: Response) => {
 
   if (error) return res.status(400).json({ header: { resultCode: resultCode.VALIDATION_ERROR, error: error.details[0].message } })
 
-  const user = await User.findOne({ mail });
+  try {
+    const user = await User.findOne({ mail });
 
-  if (!user) { return res.status(200).json({ header: { resultCode: resultCode.USER_NOT_FOUND, error: 'User not found' } }); }
+    if (!user) { return res.status(200).json({ header: { resultCode: resultCode.USER_NOT_FOUND, error: 'User not found' } }); }
 
-  if (!await isValidPassword(password, user.password)) {
-    return res.status(400).json({ header: { resultCode: resultCode.INVALID_PASSWORD, error: 'Invalid password' } })
+    if (!user.state) { return res.status(200).json({ header: { resultCode: resultCode.DISABLED_USER, error: 'User deasctivated' } }); }
+
+    if (!await isValidPassword(password, user.password)) {
+      return res.status(400).json({ header: { resultCode: resultCode.INVALID_PASSWORD, error: 'Invalid password' } })
+    }
+
+    const token = generateToken(user.name, user.id, user.role);
+
+    res.header('auth-token', token).json({
+      header: {
+        message: 'authenticated user',
+        resultCode: resultCode.OK,
+      },
+      data: {
+        user: {
+          id: user.id,
+          role: user.role,
+          name: user.name,
+          mail: user.mail,
+          address: user.address,
+          birthday: user.birthday,
+          phone: user.phone,
+        },
+        token: token
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ header: { resultCode: resultCode.FAIL, error } });
   }
 
-  const token = generateToken(user.name, user.id, user.role);
 
-  res.header('auth-token', token).json({
-    header: {
-      message: 'authenticated user',
-      resultCode: resultCode.OK,
-    },
-    data: {
-      user: {
-        id: user.id,
-        role: user.role,
-        name: user.name,
-        mail: user.mail,
-        address: user.address,
-        birthday: user.birthday,
-        phone: user.phone,
-      },
-      token: token
-    }
-  });
+
 }
 
 const isValidPassword = async (pass: string, encryptedPass: string): Promise<boolean> => {
