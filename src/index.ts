@@ -4,6 +4,7 @@ import bodyparser from 'body-parser'
 import { dbConnection } from './mongo';
 import { routerUser } from './router/user';
 import express, { Application } from 'express';
+import { routerPost } from './router/post';
 dotenv.config();
 
 
@@ -24,6 +25,8 @@ const openServer = (): boolean => {
   });
 
   app.use('/api/user', routerUser);
+
+  app.use('/api/post', routerPost);
 
   app.use((req, res) => {
     res.status(400).end();

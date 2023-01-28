@@ -53,9 +53,6 @@ export const login = async (req: Request, res: Response) => {
     console.error(error);
     res.status(500).json({ header: { resultCode: resultCode.FAIL, error } });
   }
-
-
-
 }
 
 const isValidPassword = async (pass: string, encryptedPass: string): Promise<boolean> => {

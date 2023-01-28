@@ -41,6 +41,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const mongo_1 = require("./mongo");
 const user_1 = require("./router/user");
 const express_1 = __importDefault(require("express"));
+const post_1 = require("./router/post");
 dotenv.config();
 const app = (0, express_1.default)();
 const openServer = () => {
@@ -54,6 +55,7 @@ const openServer = () => {
         });
     });
     app.use('/api/user', user_1.routerUser);
+    app.use('/api/post', post_1.routerPost);
     app.use((req, res) => {
         res.status(400).end();
     });
