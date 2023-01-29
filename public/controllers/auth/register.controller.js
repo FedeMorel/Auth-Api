@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.isMailExist = exports.registerUser = void 0;
 const joi_1 = __importDefault(require("joi"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const user_1 = require("../../schemas/user");
+const user_schema_1 = require("../../schemas/user.schema");
 const resultCode_enum_1 = require("../../utils/resultCode.enum");
 const schemaRegister = joi_1.default.object({
     name: joi_1.default.string().min(5).max(15).required(),
@@ -41,7 +41,7 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         return res.status(406).json({ header: { resultCode: resultCode_enum_1.resultCode.MAIL_REGISTRED, error: 'Mail already registered' } });
     }
     const encryptedPassword = yield encryptPassword(password);
-    const user = new user_1.User({
+    const user = new user_schema_1.User({
         name: name,
         mail: mail,
         password: encryptedPassword,
@@ -77,7 +77,7 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.registerUser = registerUser;
 const isMailExist = (mail) => __awaiter(void 0, void 0, void 0, function* () {
-    let response = yield user_1.User.findOne({ mail });
+    let response = yield user_schema_1.User.findOne({ mail });
     return !!response;
 });
 exports.isMailExist = isMailExist;

@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import Joi from "joi";
-import { Post } from "../../schemas/post.schema";
+import { Comment } from "../../schemas/comment.schema";
 import { resultCode } from "../../utils/resultCode.enum";
 
-const schemaDeletePost = Joi.object({
+const schemaDeleteComment = Joi.object({
   id: Joi.string().hex().min(24).max(24).required(),
 })
-export const deletePost = async (req: Request, res: Response) => {
+export const deleteComment = async (req: Request, res: Response) => {
   const { id } = req.body;
-  const { error } = schemaDeletePost.validate(req.body);
+  const { error } = schemaDeleteComment.validate(req.body);
 
   if (!!error) {
     return res.status(400).json(
@@ -17,11 +17,11 @@ export const deletePost = async (req: Request, res: Response) => {
   }
 
   try {
-    const post = await Post.deleteOne({ _id: id });
+    await Comment.deleteOne({ _id: id });
 
     res.status(200).json({
       header: {
-        message: 'Post deleted sastifactually',
+        message: 'Comment deleted sastifactually',
         resultCode: resultCode.OK,
       }
     });
@@ -30,5 +30,4 @@ export const deletePost = async (req: Request, res: Response) => {
     console.error(error);
     res.status(500).json({ header: { resultCode: resultCode.FAIL, error } });
   }
-
 }

@@ -1,17 +1,17 @@
 import Joi from "joi";
 import { Request, Response } from "express";
-import { Post } from "../../schemas/post.schema";
 import { resultCode } from "../../utils/resultCode.enum";
 import { getTokenInfo } from "../../utils/getTokenInfo";
+import { Comment } from "../../schemas/comment.schema";
 
-const schemaPost = Joi.object({
-  title: Joi.string().max(100).required(),
-  description: Joi.string().max(1000).required()
+const schemaComment = Joi.object({
+  idPost: Joi.string().min(24).max(24).required(),
+  comment: Joi.string().max(500).required()
 })
 
-export const createPost = async (req: Request, res: Response) => {
-  const { title, description } = req.body;
-  const { error } = schemaPost.validate(req.body);
+export const createComment = async (req: Request, res: Response) => {
+  const { idPost, comment } = req.body;
+  const { error } = schemaComment.validate(req.body);
 
   if (!!error) {
     return res.status(400).json(
@@ -19,9 +19,9 @@ export const createPost = async (req: Request, res: Response) => {
     )
   }
   const { name, id, role } = await getTokenInfo(req, res);
-  const post = new Post({
-    title,
-    description,
+  const commentData = new Comment({
+    idPost,
+    comment,
     author: {
       name,
       userId: id,
@@ -30,14 +30,14 @@ export const createPost = async (req: Request, res: Response) => {
   });
 
   try {
-    const newPost = await post.save();
+    const newCommnet = await commentData.save();
     res.status(201).json({
       header: {
-        message: 'Post created successfully',
+        message: 'Comment created successfully',
         resultCode: resultCode.OK,
       },
       data: {
-        newPost
+        newCommnet
       }
     })
   } catch (err) {

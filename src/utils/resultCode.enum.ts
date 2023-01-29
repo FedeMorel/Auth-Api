@@ -7,5 +7,8 @@ export enum resultCode {
   UNAUTHORIZED = 5,
   NOT_MODIFIED = 6,
   DISABLED_USER = 7,
+  MAXIMUM_TIME = 8,
   FAIL = 9,
+  POST_NOT_FOUND = 10,
+  COMMENT_NOT_FOUND = 11
 }

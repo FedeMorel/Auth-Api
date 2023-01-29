@@ -2,9 +2,10 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 import bodyparser from 'body-parser'
 import { dbConnection } from './mongo';
-import { routerUser } from './router/user';
-import express, { Application } from 'express';
-import { routerPost } from './router/post';
+import express, { application, Application } from 'express';
+import { routerUser } from './router/user.router';
+import { routerPost } from './router/post.router';
+import { routerComment } from './router/comment.router';
 dotenv.config();
 
 
@@ -27,6 +28,8 @@ const openServer = (): boolean => {
   app.use('/api/user', routerUser);
 
   app.use('/api/post', routerPost);
+
+  app.use('/api/comment', routerComment);
 
   app.use((req, res) => {
     res.status(400).end();

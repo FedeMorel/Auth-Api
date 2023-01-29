@@ -2,7 +2,7 @@ import Joi from 'joi';
 import bcrypt from 'bcrypt'
 import jwt from "jsonwebtoken";
 import * as dotenv from 'dotenv';
-import { User } from '../../schemas/user';
+import { User } from '../../schemas/user.schema';
 import { Request, Response } from 'express';
 import { resultCode } from '../../utils/resultCode.enum';
 dotenv.config();

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Joi from "joi";
-import { User } from "../../schemas/user";
+import { User } from "../../schemas/user.schema";
 import { resultCode } from "../../utils/resultCode.enum";
 
 const schemaDisableAccount = Joi.object({
@@ -24,7 +24,7 @@ export const disableAccount = async (req: Request, res: Response) => {
 
     res.status(200).json({
       header: {
-        message: 'User deactivated correctly',
+        message: 'User status updated',
         resultCode: resultCode.OK,
       }
     });

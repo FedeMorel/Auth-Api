@@ -40,7 +40,7 @@ const joi_1 = __importDefault(require("joi"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv = __importStar(require("dotenv"));
-const user_1 = require("../../schemas/user");
+const user_schema_1 = require("../../schemas/user.schema");
 const resultCode_enum_1 = require("../../utils/resultCode.enum");
 dotenv.config();
 const schemaLogin = joi_1.default.object({
@@ -53,7 +53,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (error)
         return res.status(400).json({ header: { resultCode: resultCode_enum_1.resultCode.VALIDATION_ERROR, error: error.details[0].message } });
     try {
-        const user = yield user_1.User.findOne({ mail });
+        const user = yield user_schema_1.User.findOne({ mail });
         if (!user) {
             return res.status(200).json({ header: { resultCode: resultCode_enum_1.resultCode.USER_NOT_FOUND, error: 'User not found' } });
         }
