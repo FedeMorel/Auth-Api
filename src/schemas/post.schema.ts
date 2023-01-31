@@ -6,12 +6,12 @@ const postSchema: Schema = new Schema({
   title: {
     type: String,
     required: true,
-    maxLength: 100
+    maxLength: 200
   },
   description: {
     type: String,
     required: true,
-    maxLength: 1000
+    maxLength: 2000
   },
   creationDate: {
     type: Date,

@@ -5,8 +5,8 @@ import { resultCode } from "../../utils/resultCode.enum";
 import { getTokenInfo } from "../../utils/getTokenInfo";
 
 const schemaPost = Joi.object({
-  title: Joi.string().max(100).required(),
-  description: Joi.string().max(1000).required()
+  title: Joi.string().max(200).required(),
+  description: Joi.string().max(2000).required()
 })
 
 export const createPost = async (req: Request, res: Response) => {

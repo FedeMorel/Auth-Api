@@ -4,8 +4,8 @@ import { Request, Response } from "express";
 import { resultCode } from "../../utils/resultCode.enum";
 
 const schemaPost = Joi.object({
-  title: Joi.string().max(100).required(),
-  description: Joi.string().max(1000).required(),
+  title: Joi.string().max(200).required(),
+  description: Joi.string().max(2000).required(),
   id: Joi.string().hex().min(24).max(24)
 })
 
