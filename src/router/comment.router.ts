@@ -10,5 +10,5 @@ export const routerComment = Router();
 
 routerComment.post('/create', verifyToken, createComment);
 routerComment.put('/update', verifyCommentOwner, updateComment);
-routerComment.delete('/delete', verifyAdminOrOwner, deleteComment);
+routerComment.post('/delete', verifyAdminOrOwner, deleteComment);
 routerComment.get('/:id', verifyToken, getCommentsOnPost);

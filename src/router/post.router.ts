@@ -11,7 +11,7 @@ export const routerPost = Router();
 routerPost.get('/posts', verifyToken, getPosts);
 routerPost.post('/create', verifyToken, createPost);
 routerPost.put('/update', verifyPostOwner, updatePost);
-routerPost.delete('/delete', verifyPostOwner, deletePost);
+routerPost.post('/delete', verifyPostOwner, deletePost);
 routerPost.get('/:id', verifyToken, getPost);
 
 
