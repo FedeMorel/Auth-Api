@@ -27,7 +27,7 @@ export const getPosts = async (req: Request, res: Response) => {
           pagingCounter,
           nextPage
         },
-        users: docs
+        posts: docs
       }
     })
   } catch (error) {
