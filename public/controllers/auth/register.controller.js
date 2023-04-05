@@ -18,7 +18,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_schema_1 = require("../../schemas/user.schema");
 const resultCode_enum_1 = require("../../utils/resultCode.enum");
 const schemaRegister = joi_1.default.object({
-    name: joi_1.default.string().min(5).max(15).required(),
+    name: joi_1.default.string().min(5).max(50).required(),
     mail: joi_1.default.string().min(10).max(50).required().email(),
     password: joi_1.default.string().min(8).max(30).required(),
     address: joi_1.default.object().keys({

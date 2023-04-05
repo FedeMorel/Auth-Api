@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 import { resultCode } from '../../utils/resultCode.enum';
 
 const schemaRegister = Joi.object({
-  name: Joi.string().min(5).max(15).required(),
+  name: Joi.string().min(5).max(50).required(),
   mail: Joi.string().min(10).max(50).required().email(),
   password: Joi.string().min(8).max(30).required(),
   address: Joi.object().keys({

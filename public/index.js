@@ -51,9 +51,7 @@ const openServer = () => {
     app.use(body_parser_1.default.urlencoded({ extended: false }));
     app.use(body_parser_1.default.json());
     app.get('/', (req, res) => {
-        res.json({
-            message: 'Auth-Api working'
-        });
+        res.redirect("https://invited-mind-087.notion.site/Auth-Api-6c9830a2848b413283eccfdfa90ab79d");
     });
     app.use('/api/user', user_router_1.routerUser);
     app.use('/api/post', post_router_1.routerPost);

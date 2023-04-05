@@ -10,5 +10,7 @@ export enum resultCode {
   MAXIMUM_TIME = 8,
   FAIL = 9,
   POST_NOT_FOUND = 10,
-  COMMENT_NOT_FOUND = 11
+  COMMENT_NOT_FOUND = 11,
+  USER__NOT_FOUND = 12,
+  FORBIDDEN = 13
 }

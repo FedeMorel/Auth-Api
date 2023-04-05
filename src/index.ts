@@ -20,9 +20,7 @@ const openServer = (): boolean => {
   app.use(bodyparser.json());
 
   app.get('/', (req, res) => {
-    res.json({
-      message: 'Auth-Api working'
-    })
+    res.redirect("https://invited-mind-087.notion.site/Auth-Api-6c9830a2848b413283eccfdfa90ab79d")
   });
 
   app.use('/api/user', routerUser);
