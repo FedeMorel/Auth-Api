@@ -10,6 +10,6 @@ export const routerUser = Router();
 
 routerUser.post('/register', registerUser);
 routerUser.post('/login', login);
-routerUser.get('/users', verifyAdmin, getUsers);
-routerUser.post('/update', validateUser, updateUser);
 routerUser.post('/disable-account', verifyAdmin, disableAccount);
+routerUser.get('/users', verifyAdmin, getUsers);
+routerUser.put('/update', validateUser, updateUser);
