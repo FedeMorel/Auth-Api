@@ -11,6 +11,5 @@ export enum resultCode {
   FAIL = 9,
   POST_NOT_FOUND = 10,
   COMMENT_NOT_FOUND = 11,
-  USER__NOT_FOUND = 12,
-  FORBIDDEN = 13
+  FORBIDDEN = 12
 }
