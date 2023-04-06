@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Comment } from "../../schemas/comment.schema";
-import { User } from "../../schemas/user.schema";
 import { resultCode } from "../../utils/resultCode.enum";
 
 export const getCommentsOnPost = async (req: Request, res: Response) => {

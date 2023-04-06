@@ -8,7 +8,7 @@ dotenv.config();
 
 export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => {
   const token = req.header('auth-token')
-  if (!token) return res.status(401).json({ header: { resultCode: resultCode.UNAUTHORIZED, message: 'Access denied' } });
+  if (!token) return res.status(401).json({ header: { resultCode: resultCode.UNAUTHORIZED, message: 'Invalid token' } });
   try {
     jwt.verify(token, process.env.TOKEN_SECRET as string);
     const object: IToken = jwt_decode(token);
@@ -16,7 +16,7 @@ export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => 
     if (object.role === "admin") {
       next();
     } else {
-      res.status(401).json({ header: { resultCode: resultCode.UNAUTHORIZED, message: 'Access denied' } });
+      res.status(401).json({ header: { resultCode: resultCode.UNAUTHORIZED, message: 'Unauthorized' } });
     }
   } catch (err) {
     res.status(401).json({ header: { resultCode: resultCode.UNAUTHORIZED, message: 'Invalid token' } });
