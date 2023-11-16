@@ -7,6 +7,7 @@ const connectionString = `mongodb+srv://${process.env.USER}:${process.env.PASSWO
 
 export const dbConnection = async () => {
   try {
+    mongoose.set('strictQuery', true);
     await mongoose.connect(connectionString);
     console.log('Base de datos conectada');
     return true;

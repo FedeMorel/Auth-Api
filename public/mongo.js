@@ -42,6 +42,7 @@ dotenv.config();
 const connectionString = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.82gad.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
 const dbConnection = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        mongoose_1.default.set('strictQuery', true);
         yield mongoose_1.default.connect(connectionString);
         console.log('Base de datos conectada');
         return true;
